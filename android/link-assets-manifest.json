@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/AncizarSerif-Italic-VariableFont_wght.ttf",
+      "sha1": "0d862d95bedc2b427fc9a1e8820dd65a097d4946"
+    },
+    {
+      "path": "assets/fonts/AncizarSerif-VariableFont_wght.ttf",
+      "sha1": "3d590f764b26e8276dec69d553ee4050b53aa303"
+    }
+  ]
+}
