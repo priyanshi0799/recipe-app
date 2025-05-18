@@ -17,4 +17,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  disabledButton: {
+    backgroundColor: '#d3d3d3',
+  },
 });

@@ -1,56 +1,48 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, FlatList, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {styles} from './Home.styles';
 import CuisineTile from '../../components/CuisineTile';
+import {CuisineResponseType, CuisineType} from '../../network/model';
 
 type HomeProps = {
   handleCardPress: (id: string) => void;
+  data: CuisineResponseType | undefined;
+  refetch: () => void;
+  isError?: boolean;
 };
 const Home = (props: HomeProps) => {
-  const {handleCardPress} = props;
+  const {handleCardPress, data, isError, refetch} = props;
 
-  return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.heading}>What are you craving for today?</Text>
-      <View style={styles.flex}>
-        <CuisineTile
-          onPress={handleCardPress}
-          description="A vibrant blend of spices, curries, and tandoori delights, balancing sweet, savory, and fiery flavors. Staples: biryani, naan, and masala chai."
-          id="1"
-          title="Indian"
-          image={require('../../../assets/indian.jpg')}
-        />
-        <CuisineTile
-          onPress={() => {}}
-          description="Bold stir-fries, dumplings, and aromatic sauces with a harmony of sweet, sour, and umami. Think Kung Pao chicken and dim sum."
-          id="2"
-          title="Chinese"
-          image={require('../../../assets/chinese.jpg')}
-        />
-        <CuisineTile
-          onPress={() => {}}
-          description="Elegant sauces, buttery pastries, and refined techniques. From coq au vin to croissants, it’s a culinary art form."
-          id="3"
-          title="French"
-          image={require('../../../assets/french.jpg')}
-        />
-        <CuisineTile
-          onPress={() => {}}
-          description="Rustic pastas, wood-fired pizzas, and rich risottos, celebrating fresh herbs, olive oil, and regional simplicity."
-          id="4"
-          title="Italian"
-          image={require('../../../assets/italian.jpg')}
-        />
-        <CuisineTile
-          onPress={() => {}}
-          description="Fresh, sun-kissed flavors—olive oil, grilled meats, hummus, and feta. Light, healthy, and rich in herbs."
-          id="5"
-          title="Mediterranean"
-          image={require('../../../assets/mediterranean.jpg')}
-        />
-      </View>
-      <View style={{height: 40}} />
-    </ScrollView>
+  const renderItem = ({item}: {item: CuisineType}) => (
+    <CuisineTile
+      onPress={handleCardPress}
+      description={item.description}
+      id={item.name}
+      title={item.name}
+      image={item.imageUrl}
+    />
+  );
+
+  return isError ? (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText}>Something went wrong</Text>
+      <TouchableOpacity onPress={refetch}>
+        <Text style={styles.retryText}>Retry</Text>
+      </TouchableOpacity>
+    </View>
+  ) : (
+    data && data?.length && (
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item._id}
+        style={styles.container}
+        ListHeaderComponent={
+          <Text style={styles.heading}>What are you craving for today?</Text>
+        }
+        ListFooterComponent={<View style={{height: 40}} />}
+      />
+    )
   );
 };
 

@@ -1,36 +1,19 @@
-import {useCallback, useLayoutEffect} from 'react';
-import Recipe from './Recipe';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {screenNames} from '../../navigationConstants';
+import {useCallback} from 'react';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {getRecipe, markFavorite} from '../../network/api';
-import {ActivityIndicator, ToastAndroid} from 'react-native';
-import {RecipeType} from '../../network/model';
+import {getFavoriteRecipes, getRecipe, markFavorite} from '../../network/api';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import Recipe from '../Recipe/Recipe';
 import axios from 'axios';
-import HeaderRight from '../../components/HeaderRight';
+import {ToastAndroid} from 'react-native';
+import {screenNames} from '../../navigationConstants';
+import {RecipeType} from '../../network/model';
 
-interface RecipeContainerRouteParams {
-  cuisineName: string;
-}
-
-const RecipeContainer = ({
-  route,
-}: {
-  route: {params: RecipeContainerRouteParams};
-}) => {
-  const {cuisineName} = route.params;
-
+const FavoriteRecipesContainer = () => {
   const navigation = useNavigation<any>();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <HeaderRight />,
-    });
-  }, [navigation]);
-
   const {data, isError, isLoading, refetch} = useQuery({
-    queryKey: ['recipe'],
-    queryFn: () => getRecipe(cuisineName),
+    queryKey: ['favorite'],
+    queryFn: () => getFavoriteRecipes(),
     retry: false,
   });
 
@@ -64,28 +47,23 @@ const RecipeContainer = ({
   const toggleFavorite = (id: string) => {
     mutate({
       recipeId: id,
-      isFav:
-        data?.find((recipe: RecipeType) => recipe._id === id)?.isFavorite ===
-        false
-          ? false
-          : true,
+      isFav: true,
     });
   };
 
-  const navigateToRecipeDetail = (recipe: RecipeType) =>
+  const navigateToRecipeDetail = (recipe: RecipeType) => {
     navigation.navigate(screenNames.RecipeDetails, {
       recipe,
     });
+  };
 
-  return isLoading ? (
-    <ActivityIndicator />
-  ) : (
+  return (
     <Recipe
-      recipes={data}
       navigateToRecipeDetail={navigateToRecipeDetail}
+      recipes={data}
       toggleFavorite={toggleFavorite}
     />
   );
 };
 
-export default RecipeContainer;
+export default FavoriteRecipesContainer;

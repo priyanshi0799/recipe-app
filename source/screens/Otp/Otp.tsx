@@ -7,10 +7,12 @@ type OtpProps = {
   handleChange: (text: string, index: number) => void;
   handleSubmit: () => void;
   ref: React.RefObject<(TextInput | null)[]>;
+  isValid: boolean;
+  error?: string;
 };
 
 function Otp(props: OtpProps) {
-  const {otp, handleChange, handleSubmit, ref} = props;
+  const {otp, handleChange, handleSubmit, ref, isValid, error} = props;
 
   return (
     <View style={styles.container}>
@@ -33,7 +35,13 @@ function Otp(props: OtpProps) {
         ))}
       </View>
 
-      <Button handleSubmit={handleSubmit} title="Verify OTP" />
+      {error?.length ? <Text style={styles.errorText}>{error}</Text> : null}
+
+      <Button
+        handleSubmit={handleSubmit}
+        title="Verify OTP"
+        isDisabled={!isValid}
+      />
     </View>
   );
 }

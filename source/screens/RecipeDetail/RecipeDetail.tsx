@@ -1,33 +1,30 @@
 import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {styles} from './RecipeDetail.styles';
-import {favIconPath} from '../../utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {RecipeType} from '../../network/model';
 
-interface RecipeDetailRouteParams {
-  recipe: {
-    image: string;
-    title: string;
-    ingredients: string[];
-    steps: string[];
-  };
-}
+type RecipeDetailProps = {
+  recipe: RecipeType;
+  toggleFavorite: (id: string) => void;
+  isFavorite: boolean;
+};
 
-export default function RecipeDetail({
-  route,
-}: {
-  route: {params: RecipeDetailRouteParams};
-}) {
-  const {recipe} = route.params;
+export default function RecipeDetail(props: RecipeDetailProps) {
+  const {recipe, isFavorite, toggleFavorite} = props;
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={{uri: recipe.image}} style={styles.image} />
+        <Image source={{uri: recipe.imageUrl}} style={styles.image} />
       </View>
 
       <View style={styles.flex}>
-        <Text style={styles.title}>{recipe.title}</Text>
-        <TouchableOpacity style={styles.heartIcon}>
-          <Image source={favIconPath} style={styles.heartIcon} />
+        <Text style={styles.title}>{recipe.name}</Text>
+        <TouchableOpacity
+          style={styles.heartIcon}
+          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+          onPress={() => toggleFavorite(recipe._id)}>
+          <Icon name="heart" size={20} color={isFavorite ? 'red' : '#ccc'} />
         </TouchableOpacity>
       </View>
 

@@ -1,5 +1,3 @@
-import SplashScreen from './screens/SplashScreen';
-
 export const screenNames = {
   SplashScreen: 'Splash',
   Login: 'Login',
@@ -7,4 +5,12 @@ export const screenNames = {
   Home: 'Home',
   RecipeDetails: 'RecipeDetails',
   Recipe: 'Recipe',
+  FavoriteRecipes: 'FavoriteRecipes',
+};
+
+export const HeaderTitles = {
+  Home: 'Choose your cuisine',
+  Recipe: 'Recipes',
+  FavoriteRecipes: 'Your Favorites',
+  RecipeDetails: `Let's cook`,
 };

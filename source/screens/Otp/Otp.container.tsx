@@ -1,13 +1,56 @@
-import {TextInput, Alert} from 'react-native';
-import {useState, useRef} from 'react';
+import {TextInput} from 'react-native';
+import {useState, useRef, useEffect} from 'react';
 import Otp from './Otp';
 import {useNavigation} from '@react-navigation/native';
 import {screenNames} from '../../navigationConstants';
+import {useMutation} from '@tanstack/react-query';
+import {signinUser, signupUser} from '../../network/api';
+import axios from 'axios';
 
-const OtpContainer = () => {
+interface OtpContainerRouteParams {
+  number: string;
+  password: string;
+  isSignUp: boolean;
+}
+
+const OtpContainer = ({route}: {route: {params: OtpContainerRouteParams}}) => {
+  const {number, password, isSignUp} = route.params;
+
   const navigation = useNavigation<any>();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const inputs = useRef<(TextInput | null)[]>([]);
+  const [isValid, setIsValid] = useState(false);
+  const [apiError, setError] = useState('');
+
+  useEffect(() => {
+    if (otp.join('').length === 6) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [otp]);
+
+  const {mutate} = useMutation({
+    mutationFn: isSignUp ? signupUser : signinUser,
+    onSuccess: data => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: screenNames.Home}],
+      });
+    },
+    onError: (err: any) => {
+      let errorMessage = 'Something went wrong';
+
+      if (axios.isAxiosError(err)) {
+        errorMessage =
+          err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          err?.message;
+      }
+
+      setError(errorMessage);
+    },
+  });
 
   const handleChange = (text: string, index: number) => {
     if (/^\d$/.test(text)) {
@@ -26,14 +69,12 @@ const OtpContainer = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const fullOtp = otp.join('');
-    if (fullOtp.length < 6) {
-      Alert.alert('Invalid', 'Please enter a 6-digit OTP');
-    } else {
-      navigation.replace(screenNames.Home);
-    }
-  };
+  const handleSubmit = () =>
+    mutate({
+      number: number,
+      password: password,
+      otp: otp.join(''),
+    });
 
   return (
     <Otp
@@ -41,6 +82,8 @@ const OtpContainer = () => {
       handleSubmit={handleSubmit}
       otp={otp}
       ref={inputs}
+      isValid={isValid}
+      error={apiError}
     />
   );
 };

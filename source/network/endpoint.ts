@@ -1,0 +1,9 @@
+export const BASE_URL = 'http://10.0.2.2:4000/api/';
+export const SIGNUP = 'auth/signup';
+export const LOGIN = 'auth/signin';
+export const LOGOUT = 'auth/signout';
+export const GET_USER_DETAILS = 'auth/user_details';
+export const GET_CUISINE = 'cusine/get_cusine';
+export const GET_RECIPE = 'recipe/get_recipe';
+export const MARK_FAVORITE = 'recipe/favorite_recipe';
+export const GET_FAVORITE_RECIPES = 'recipe/get_favorite_recipes';

@@ -29,4 +29,11 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: '#f9f9f9',
   },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 8,
+    textAlign: 'center',
+    marginTop: -12,
+  },
 });

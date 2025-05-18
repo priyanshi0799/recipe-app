@@ -11,7 +11,7 @@ import {styles} from './CuisineTile.styles';
 type CuisineTileProps = {
   title: string;
   description: string;
-  image: ImageSourcePropType;
+  image: string;
   onPress: (id: string) => void;
   id: string;
 };
@@ -20,7 +20,7 @@ const CuisineTile = (props: CuisineTileProps) => {
 
   return (
     <TouchableOpacity style={styles.card} onPress={() => onPress(id)}>
-      <Image source={image} style={styles.image} />
+      <Image source={{uri: image}} style={styles.image} />
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>

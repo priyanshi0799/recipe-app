@@ -1,48 +1,42 @@
-import {
-  Text,
-  SafeAreaView,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, FlatList, Text, View} from 'react-native';
 import React from 'react';
 import {styles} from './Recipe.styles';
-import {RecipeType} from './Recipe.container';
-import {favIconPath} from '../../utils';
+import {RecipeResponseType, RecipeType} from '../../network/model';
+import RecipeTile from '../../components/RecipeTile';
 
 type RecipeProps = {
-  navigateToRecipeDetail: () => void;
-  recipes: Array<RecipeType>;
+  navigateToRecipeDetail: (item: RecipeType) => void;
+  recipes: RecipeResponseType | undefined;
+  toggleFavorite: (id: string) => void;
 };
+
 const Recipe = (props: RecipeProps) => {
-  const {navigateToRecipeDetail, recipes} = props;
+  const {navigateToRecipeDetail, recipes, toggleFavorite} = props;
 
-  const renderItem = ({item}: {item: any}) => (
-    <TouchableOpacity style={styles.card} onPress={navigateToRecipeDetail}>
-      <Image source={{uri: item.image}} style={styles.image} />
-
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>{item.title}</Text>
-        {item?.isFav ? (
-          <Image source={favIconPath} style={styles.heartIcon} />
-        ) : (
-          <></>
-        )}
-      </View>
-    </TouchableOpacity>
+  const renderItem = ({item}: {item: RecipeType}) => (
+    <RecipeTile
+      item={item}
+      navigateToRecipeDetail={navigateToRecipeDetail}
+      toggleFavorite={toggleFavorite}
+    />
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={recipes}
-        keyExtractor={item => item.id}
-        renderItem={renderItem}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.list}
-      />
+      {recipes?.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.text}>No Recipes Found</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={recipes}
+          keyExtractor={item => item._id}
+          renderItem={renderItem}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.list}
+        />
+      )}
     </SafeAreaView>
   );
 };
