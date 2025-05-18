@@ -84,6 +84,8 @@ const RecipeContainer = ({
       recipes={data}
       navigateToRecipeDetail={navigateToRecipeDetail}
       toggleFavorite={toggleFavorite}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

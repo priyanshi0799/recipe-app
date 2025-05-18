@@ -1,8 +1,9 @@
-import {View, Text, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import React from 'react';
 import {styles} from './Home.styles';
 import CuisineTile from '../../components/CuisineTile';
 import {CuisineResponseType, CuisineType} from '../../network/model';
+import Error from '../../components/Error';
 
 type HomeProps = {
   handleCardPress: (id: string) => void;
@@ -24,12 +25,7 @@ const Home = (props: HomeProps) => {
   );
 
   return isError ? (
-    <View style={styles.errorContainer}>
-      <Text style={styles.errorText}>Something went wrong</Text>
-      <TouchableOpacity onPress={refetch}>
-        <Text style={styles.retryText}>Retry</Text>
-      </TouchableOpacity>
-    </View>
+    <Error refetch={refetch} />
   ) : (
     data && data?.length && (
       <FlatList

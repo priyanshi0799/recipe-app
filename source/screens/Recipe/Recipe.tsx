@@ -3,15 +3,19 @@ import React from 'react';
 import {styles} from './Recipe.styles';
 import {RecipeResponseType, RecipeType} from '../../network/model';
 import RecipeTile from '../../components/RecipeTile';
+import Error from '../../components/Error';
 
 type RecipeProps = {
   navigateToRecipeDetail: (item: RecipeType) => void;
   recipes: RecipeResponseType | undefined;
   toggleFavorite: (id: string) => void;
+  isError?: boolean;
+  refetch: () => void;
 };
 
 const Recipe = (props: RecipeProps) => {
-  const {navigateToRecipeDetail, recipes, toggleFavorite} = props;
+  const {navigateToRecipeDetail, recipes, toggleFavorite, isError, refetch} =
+    props;
 
   const renderItem = ({item}: {item: RecipeType}) => (
     <RecipeTile
@@ -23,7 +27,9 @@ const Recipe = (props: RecipeProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {recipes?.length === 0 ? (
+      {isError ? (
+        <Error refetch={refetch} />
+      ) : recipes?.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.text}>No Recipes Found</Text>
         </View>
