@@ -1,4 +1,10 @@
-import {SafeAreaView, FlatList, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  FlatList,
+  Text,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import {styles} from './Recipe.styles';
 import {RecipeResponseType, RecipeType} from '../../network/model';
@@ -11,11 +17,18 @@ type RecipeProps = {
   toggleFavorite: (id: string) => void;
   isError?: boolean;
   refetch: () => void;
+  isLoading?: boolean;
 };
 
 const Recipe = (props: RecipeProps) => {
-  const {navigateToRecipeDetail, recipes, toggleFavorite, isError, refetch} =
-    props;
+  const {
+    navigateToRecipeDetail,
+    recipes,
+    toggleFavorite,
+    isError,
+    refetch,
+    isLoading,
+  } = props;
 
   const renderItem = ({item}: {item: RecipeType}) => (
     <RecipeTile
@@ -29,6 +42,8 @@ const Recipe = (props: RecipeProps) => {
     <SafeAreaView style={styles.container}>
       {isError ? (
         <Error refetch={refetch} />
+      ) : isLoading ? (
+        <ActivityIndicator />
       ) : recipes?.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.text}>No Recipes Found</Text>

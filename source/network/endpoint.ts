@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://10.0.2.2:4000/api/';
+export const BASE_URL = 'https://recipe-app-backend-atzh.onrender.com/api/';
 export const SIGNUP = 'auth/signup';
 export const LOGIN = 'auth/signin';
 export const LOGOUT = 'auth/signout';

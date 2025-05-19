@@ -62,6 +62,9 @@ const FavoriteRecipesContainer = () => {
       navigateToRecipeDetail={navigateToRecipeDetail}
       recipes={data}
       toggleFavorite={toggleFavorite}
+      isLoading={isLoading}
+      isError={isError}
+      refetch={refetch}
     />
   );
 };

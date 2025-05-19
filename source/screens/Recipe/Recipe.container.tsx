@@ -28,10 +28,14 @@ const RecipeContainer = ({
     });
   }, [navigation]);
 
-  const {data, isError, isLoading, refetch} = useQuery({
-    queryKey: ['recipe'],
+  const {data, isError, isLoading, refetch, isFetching, isSuccess} = useQuery({
+    queryKey: ['recipe', cuisineName],
     queryFn: () => getRecipe(cuisineName),
     retry: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    staleTime: 0,
+    placeholderData: undefined,
   });
 
   useFocusEffect(
@@ -77,15 +81,14 @@ const RecipeContainer = ({
       recipe,
     });
 
-  return isLoading ? (
-    <ActivityIndicator />
-  ) : (
+  return (
     <Recipe
       recipes={data}
       navigateToRecipeDetail={navigateToRecipeDetail}
       toggleFavorite={toggleFavorite}
       isError={isError}
       refetch={refetch}
+      isLoading={isLoading}
     />
   );
 };
